@@ -1,2 +1,1 @@
-# airbnb_app
-Aplicación Airbnb en React Native
+# airbnb_servicios
