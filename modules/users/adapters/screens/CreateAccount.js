@@ -50,9 +50,11 @@ export default function CreateAccount() {
                                             }
                                         }
                                         const response = await axios.doPost('/person/', object)
+                                        console.log("servidor",response)
+                                        setShow(false)
                                     } catch (error) {
                                         setShow(false)
-                                        console.log(error);
+                                        console.log("error", error);
                                     }
                                 })()
                                 //         try {
