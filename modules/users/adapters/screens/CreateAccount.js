@@ -3,8 +3,9 @@ import React, { useState } from 'react'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { isEmpty, size } from 'lodash'
 import { Image, Input, Button, Icon } from '@rneui/base'
-// import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { validateEmail } from '../../../../kernel/validations'
+import axios from '../../../../kernel/http-client.gateway'
 // import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import Loading from '../../../../kernel/components/Loading'
@@ -16,7 +17,7 @@ export default function CreateAccount() {
         password: '',
         repeatPassword: ''
     }
-    // const auth = getAuth()
+    const auth = getAuth()
     const [show, setShow] = useState(false)
     const [error, setError] = useState(payLoad)
     const [data, setData] = useState(payLoad)
@@ -34,24 +35,41 @@ export default function CreateAccount() {
                         setShow(true)
                         setError(payLoad)
                         console.log('Listo para el registro');
-                        // createUserWithEmailAndPassword(auth, data.email, data.password)
-                        //     .then(async (userCredential) => {
-                        //         const user = userCredential.user;
-                        //         try {
-                        //             await AsyncStorage.setItem('@session', JSON.stringify(user))
-                        //         } catch (e) {
-                        //             console.error("Error -> createUser Storage", e);
-                        //         }
-                        //         console.log("Created User", user);
-                        //         setShow(false)
-                        //         navigation.navigate("profileStack")
-                        //     })
-                        //     .catch((error) => {
-                        //         setError({ email: '', password: 'No se pudo crear el usuario' })
-                        //         setShow(false)
-                        //         const errorCode = error.code;
-                        //         const errorMessage = error.message;
-                        //     });
+                        createUserWithEmailAndPassword(auth, data.email, data.password)
+                            .then(async (userCredential) => {
+                                const user = userCredential.user;
+                                (async () => {
+                                    try {
+                                        const object = {
+                                            "birthday": "",
+                                            "full_name": "",
+                                            "user": {
+                                                "email": data.email,
+                                                "uid": data.uid,
+                                                "image_profile": ""
+                                            }
+                                        }
+                                        const response = await axios.doPost('/person/', object)
+                                    } catch (error) {
+                                        setShow(false)
+                                        console.log(error);
+                                    }
+                                })()
+                                //         try {
+                                //             await AsyncStorage.setItem('@session', JSON.stringify(user))
+                                //         } catch (e) {
+                                //             console.error("Error -> createUser Storage", e);
+                                //         }
+                                // console.log("Created User", user);
+                                // setShow(false)
+                                //         navigation.navigate("profileStack")
+                            })
+                            .catch((error) => {
+                                setError({ email: '', password: 'No se pudo crear el usuario' })
+                                setShow(false)
+                                const errorCode = error.code;
+                                const errorMessage = error.message;
+                            });
                     } else {
                         setError({
                             email: '',
@@ -170,7 +188,7 @@ const styles = StyleSheet.create({
     btn: {
         backgroundColor: '#e72c5a'
     },
-    screen:{
-        backgroundColor:'white'
+    screen: {
+        backgroundColor: 'white'
     },
 })

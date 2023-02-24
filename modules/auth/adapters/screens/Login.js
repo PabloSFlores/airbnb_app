@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Text } from 'react-native'
 import React, { useState } from 'react'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { isEmpty, size } from 'lodash'
@@ -28,7 +28,7 @@ export default function Login() {
             setShow(true)
             setError(payLoad)
             console.log('Listo para el registro');
-            
+
             setShow(false)
             // signInWithEmailAndPassword(auth, email, password)
             //     .then(async (userCredential) => {
@@ -100,7 +100,12 @@ export default function Login() {
                     />
                 </View>
             </View>
-            <Loading show={show} text='Registrando' />
+            <Text
+                style={styles.createAccount}
+                onPress={() => console.log("Vamos")}>
+                Crear cuenta
+            </Text>
+            <Loading show={show} text='Iniciando sesión' />
         </KeyboardAwareScrollView>
     )
 }
@@ -131,7 +136,10 @@ const styles = StyleSheet.create({
     btn: {
         backgroundColor: '#e72c5a'
     },
-    screen:{
-        backgroundColor:'white'
+    screen: {
+        backgroundColor: 'white'
+    },
+    createAccount: {
+        color: '#007bff'
     },
 })
