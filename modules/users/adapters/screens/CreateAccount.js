@@ -41,11 +41,11 @@ export default function CreateAccount() {
                                 (async () => {
                                     try {
                                         const object = {
-                                            "birthday": "",
-                                            "full_name": "",
+                                            "birthday": null,
+                                            "full_name": null,
                                             "user": {
-                                                "email": data.email,
-                                                "uid": data.uid,
+                                                "email": user.email,
+                                                "uid": user.uid,
                                                 "image_profile": ""
                                             }
                                         }
