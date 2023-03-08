@@ -3,18 +3,19 @@ import React, { useState } from 'react'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { isEmpty, size } from 'lodash'
 import { Image, Input, Button, Icon } from '@rneui/base'
-// import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 // import { validateEmail } from '../../../../kernel/validations'
 // import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import Loading from '../../../../kernel/components/Loading'
 
 export default function Login() {
+    
     const payLoad = {
         email: '',
         password: ''
     }
-    // const auth = getAuth()
+    const auth = getAuth()
     const [show, setShow] = useState(false)
     const [error, setError] = useState(payLoad)
     const [data, setData] = useState(payLoad)
@@ -30,24 +31,17 @@ export default function Login() {
             console.log('Listo para el registro');
 
             setShow(false)
-            // signInWithEmailAndPassword(auth, email, password)
-            //     .then(async (userCredential) => {
-            //         const user = userCredential.user;
-            //         try {
-            //             await AsyncStorage.setItem('@session', JSON.stringify(user))
-            //         } catch (e) {
-            //             console.error("Error -> login Storage", e);
-            //         }
-            //         console.log("Login", user);
-            //         setShow(false)
-            //         navigation.navigate("userGuestStack")
-            //     })
-            //     .catch((error) => {
-            //         setError({ email: '', password: 'Usuario o contraseña incorrectos' })
-            //         setShow(false)
-            //         const errorCode = error.code;
-            //         const errorMessage = error.message;
-            //     });
+            signInWithEmailAndPassword(auth, data.email, data.password)
+                .then(async (userCredential) => {
+                    setShow(false)
+                })
+                .catch((error) => {
+                    console.log('error', error);
+                    setError({ email: '', password: 'Usuario o contraseña incorrectos' })
+                    setShow(false)
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                });
         } else {
             setShow(false)
             setError({

@@ -6,12 +6,13 @@ import { Image, Input, Button, Icon } from '@rneui/base'
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { validateEmail } from '../../../../kernel/validations'
 import axios from '../../../../kernel/http-client.gateway'
-// import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import Loading from '../../../../kernel/components/Loading'
+import { useNavigation } from '@react-navigation/native'
 
 export default function CreateAccount() {
-    // const { navigation } = props
+    const { navigation } = useNavigation()
     const payLoad = {
         email: '',
         password: '',
@@ -38,33 +39,14 @@ export default function CreateAccount() {
                         createUserWithEmailAndPassword(auth, data.email, data.password)
                             .then(async (userCredential) => {
                                 const user = userCredential.user;
-                                (async () => {
-                                    try {
-                                        const object = {
-                                            "birthday": null,
-                                            "full_name": null,
-                                            "user": {
-                                                "email": user.email,
-                                                "uid": user.uid,
-                                                "image_profile": ""
-                                            }
-                                        }
-                                        const response = await axios.doPost('/person/', object)
-                                        console.log("servidor",response)
-                                        setShow(false)
-                                    } catch (error) {
-                                        setShow(false)
-                                        console.log("error", error);
-                                    }
-                                })()
-                                //         try {
-                                //             await AsyncStorage.setItem('@session', JSON.stringify(user))
-                                //         } catch (e) {
-                                //             console.error("Error -> createUser Storage", e);
-                                //         }
-                                // console.log("Created User", user);
-                                // setShow(false)
-                                //         navigation.navigate("profileStack")
+                                try {
+                                    await AsyncStorage.setItem('@session', JSON.stringify(user))
+                                } catch (e) {
+                                    console.error("Error -> createUser Storage", e);
+                                }
+                                console.log("Created User", user);
+                                setShow(false)
+                                navigation.navigate("profileStack")
                             })
                             .catch((error) => {
                                 setError({ email: '', password: 'No se pudo crear el usuario' })

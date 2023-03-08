@@ -2,30 +2,36 @@ import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Icon } from '@rneui/base'
-import Login from '../../modules/auth/adapters/screens/Login'
-import CreateAccount from '../../modules/users/adapters/screens/CreateAccount'
+import HomeStack from '../stack/HomeStack'
+import ProfileStack from '../stack/ProfileStack'
+import RentStack from '../stack/RentStack'
 
 const Tab = createBottomTabNavigator()
-
-export default function Navigation() {
+export default function NavigationLogged() {
     return (
         <NavigationContainer>
             <Tab.Navigator
-                initialRouteName='login'
+                initialRouteName='home'
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ color }) => screenOptions(route, color),
                     tabBarActiveTintColor: 'tomato',
-                    tabBarInactiveTintColor: 'gray'
+                    tabBarInactiveTintColor: 'gray',
+                    headerShown:false
                 })}>
                     <Tab.Screen
-                        name='login'
-                        component={Login}
-                        options={{title: 'Inicio de sesión'}}
+                        name='home'
+                        component={HomeStack}
+                        options={{title: 'Home'}}
                     />
                     <Tab.Screen
-                        name='createAccount'
-                        component={CreateAccount}
-                        options={{title: 'Crear cuenta'}}
+                        name='rentas'
+                        component={RentStack}
+                        options={{title: 'rentas'}}
+                    />
+                    <Tab.Screen
+                        name='perfil'
+                        component={ProfileStack}
+                        options={{title: 'Perfil'}}
                     />
 
             </Tab.Navigator>
@@ -36,12 +42,14 @@ export default function Navigation() {
 const screenOptions = (route, color) => {
     let iconName;
     switch (route.name) {
-        case 'login':
-            iconName = 'login'
+        case 'home':
+            iconName = 'home-circle-outline'
             break;
-        case 'createAccount':
-            iconName = 'account-plus-outline'
+        case 'rentas':
+            iconName = 'cash'
             break
+        case 'perfil':
+            iconName = 'account'
         default:
             break;
     }
